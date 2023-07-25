@@ -15,7 +15,12 @@
 
 ;; Add-to-list most-recent/oldest
 
+(require 'ring)
 (require 'persp-mode)
+(require 'cl-lib)
+(require 'evil)
+(require 'dash)
+
 (require 'carousel--macros)
 (require 'carousel--util)
 (require 'carousel--edit)
@@ -23,7 +28,6 @@
 (require 'carousel--movement)
 (require 'carousel--control)
 (require 'carousel--windows)
-
 
 ;;-- vars
 
@@ -35,7 +39,7 @@
 
 (defvar carousel-column-fn #'carousel-setup-columns-default "sets up the window config, returning windows to claim")
 
-(defvar carousel-name-suffix "-WR")
+(defvar carousel-name-suffix "-Carousel")
 
 (defvar carousel-focus-style 'newest "newest, oldest, balanced")
 
@@ -51,13 +55,13 @@
   :lighter "Carousel"
   :global t
   :group 'carousel
-  (add-to-list 'persp-created-functions #'carousel-create-persp-fn)
-  (add-to-list 'persp-activated-functions #'carousel-activate-persp-fn)
+  (add-to-list 'persp-created-functions           #'carousel-create-persp-fn)
+  (add-to-list 'persp-activated-functions         #'carousel-activate-persp-fn)
   (add-to-list 'persp-before-deactivate-functions #'carousel-deactivate-persp-fn)
-  (add-to-list 'persp-before-kill-functions #'carousel-kill-persp-fn)
-  (add-hook 'find-file-hook #'carousel-add-current-buffer)
-  (add-hook 'kill-buffer-hook #'carousel-remove-buffer)
-  (add-hook 'kill-buffer-query-functions #'carousel-protect-scratch-p -50)
+  (add-to-list 'persp-before-kill-functions       #'carousel-kill-persp-fn)
+  (add-hook 'find-file-hook                       #'carousel-add-current-buffer)
+  (add-hook 'kill-buffer-hook                     #'carousel-remove-buffer)
+  (add-hook 'kill-buffer-query-functions          #'carousel-protect-scratch-p -50)
   )
 
 ;;-- end mode

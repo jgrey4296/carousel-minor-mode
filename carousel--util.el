@@ -1,7 +1,12 @@
 ;;; carousel--util.el -*- lexical-binding: t; -*-
-
 (eval-when-compile
-  (require 'carousel--macros))
+  (require 'carousel--macros)
+  (require 'ring)
+  (require 'persp-mode)
+  (require 'cl-lib)
+  (require 'evil)
+  (require 'dash)
+  )
 
 (defun carousel--newer (len index loop)
   " given the ring length, current index, and loop param
@@ -77,7 +82,7 @@ return the next older index"
                                     '(:background "red"))) windows)
           (setq curr-win (window-prev-sibling curr-win))
           )
-        (message (format "*Claimed WR Buffers: %s*"
+        (message (format "*Claimed Carousel Buffers: %s*"
                          (string-join windows " | ")
                          ))
         )

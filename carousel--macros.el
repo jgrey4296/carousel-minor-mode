@@ -1,11 +1,10 @@
 ;;; carousel--macros.el -*- lexical-binding: t; -*-
 
-(eval-when-compile
-  (require 'ring)
-  (require 'persp-mode)
-  (require 'cl-lib)
-  (require 'evil)
-  (require 'dash))
+(require 'ring)
+(require 'persp-mode)
+(require 'cl-lib)
+(require 'evil)
+(require 'dash)
 
 (defalias 'carousel--get (symbol-function 'ring-ref))
 (defalias 'carousel--length (symbol-function 'ring-length))

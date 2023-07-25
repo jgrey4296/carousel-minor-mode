@@ -1,13 +1,19 @@
 ;;; carousel--edit.el -*- lexical-binding: t; -*-
 
 (eval-when-compile
-  (require 'carousel--macros))
+  (require 'carousel--macros)
+  (require 'ring)
+  (require 'persp-mode)
+  (require 'cl-lib)
+  (require 'evil)
+  (require 'dash)
+  )
 
 (defun carousel-edit-order ()
   (interactive)
   (with-carousel
       (let ((buffers (ring-elements wr-actual))
-            (edit-buffer (get-buffer-create (format "*WR Buffers: %s*" (persp-parameter 'name))))
+            (edit-buffer (get-buffer-create (format "*Carousel Buffers: %s*" (persp-parameter 'name))))
             )
         (with-current-buffer edit-buffer
           (auto-save-mode -1)

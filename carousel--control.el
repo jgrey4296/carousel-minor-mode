@@ -1,6 +1,12 @@
 ;;; carousel--control.el -*- lexical-binding: t; -*-
 (eval-when-compile
-  (require 'carousel--macros))
+  (require 'carousel--macros)
+  (require 'ring)
+  (require 'persp-mode)
+  (require 'cl-lib)
+  (require 'evil)
+  (require 'dash)
+  )
 
 (defun carousel-clear-ring (&optional arg)
   (interactive "p")

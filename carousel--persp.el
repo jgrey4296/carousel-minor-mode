@@ -1,7 +1,13 @@
 ;;; carousel--persp.el -*- lexical-binding: t; -*-
-
 (eval-when-compile
-  (require 'carousel--macros))
+  (require 'carousel--macros)
+  (require 'ring)
+  (require 'persp-mode)
+  (require 'cl-lib)
+  (require 'evil)
+  (require 'dash)
+  )
+
 
 (defun carousel-new ()
   " create a new perspective and ring "
