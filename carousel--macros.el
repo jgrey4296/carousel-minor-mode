@@ -10,7 +10,6 @@
 (defalias 'carousel--length (symbol-function 'ring-length))
 
 (defmacro with-carousel (&rest body)
-  (declare (indent 1))
   `(when (persp-parameter 'carousel)
      (let ((wr-persp      (get-current-persp))
            (wr-actual     (persp-parameter 'carousel-actual))
@@ -28,7 +27,6 @@
   )
 
 (defmacro with-other-carousel (persp &rest body)
-  (declare (indent 1))
   `(when (persp-parameter 'carousel persp)
      (let ((wr-persp      persp)
            (wr-actual     (persp-parameter 'carousel-actual persp))
@@ -44,14 +42,12 @@
   )
 
 (defmacro when-carousel (&rest body)
-  (declare (indent 1))
   `(when (persp-parameter 'carousel)
      ,@body
      )
   )
 
 (defmacro with-carousel-adding (&rest body)
-  (declar (indent 1))
   `(progn
      (setq carousel--adding t)
      ,@body
