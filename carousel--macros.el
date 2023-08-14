@@ -19,7 +19,8 @@
            (wr-duplicates (persp-parameter 'carousel-duplicates))
            (wr-focus      (persp-parameter 'carousel-focus))
            (wr-max        (persp-parameter 'carousel-max))
-           (wr-scratch    (persp-parameter 'carousel-scratch))
+           (wr-start      (persp-parameter 'carousel-start))
+           (wr-end        (persp-parameter 'carousel-end))
            )
        ,@body
        )

@@ -129,6 +129,8 @@
             (ring-len (ring-length wr-actual))
             (focus wr-focus)
             )
+        (when (and wr-loop (zerop focus))
+          (set-window-buffer (pop windows) (persp-parameter 'carousel-end)))
         (while windows
           (if (carousel-set-window (pop windows) focus)
               (setq focus (carousel--older ring-len focus wr-loop)))
@@ -143,6 +145,8 @@
             (ring-len (ring-length wr-actual))
             (focus wr-focus)
             )
+        (when (and wr-loop (eq focus ring-len))
+          (set-window-buffer (pop windows) (persp-parameter 'carousel-start)))
         (while windows
           (if (carousel-set-window (pop windows) focus)
               (setq focus (carousel--newer ring-len focus wr-loop)))
@@ -154,7 +158,7 @@
 (defun carousel-set-window (window index)
   (with-carousel
       (unless (window-live-p window) (select-window window))
-    (set-window-buffer window (if index (carousel--get wr-actual index) wr-scratch))
+    (set-window-buffer window (if index (carousel--get wr-actual index) wr-start))
     (when (and index (fboundp #'solaire-mode))
       (with-current-buffer (window-buffer window)
         (solaire-mode (if (zerop (mod index 2)) 1 -1))

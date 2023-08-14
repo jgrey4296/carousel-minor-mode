@@ -8,6 +8,7 @@
   (require 'dash)
   )
 
+(defvar carousel-create-hook nil)
 
 (defun carousel-new ()
   " create a new perspective and ring "
@@ -22,7 +23,7 @@
      (add-hook 'find-file-hook              #'carousel-add-current-buffer)
      (add-hook 'kill-buffer-hook            #'carousel-remove-buffer)
      (add-hook 'kill-buffer-query-functions #'carousel-protect-scratch-p -50)
-     (switch-to-buffer (persp-parameter 'carousel-scratch))
+     (switch-to-buffer (persp-parameter 'carousel-start))
      (carousel-add-to-head curr)
      (carousel-reset-columns t)
      )
@@ -56,7 +57,7 @@
      (remove-hook 'kill-buffer-query-functions #'carousel-protect-scratch-p -50)
      (mapc #'delete-persp-parameter
              '(carousel carousel-actual carousel-grow carousel-loop carousel-duplicates
-               carousel-focus carousel-max carousel-backgrounds carousel-scratch))
+               carousel-focus carousel-max carousel-backgrounds carousel-start carousel-end))
      (persp-delete-other-windows)
      (persp-rename (string-replace carousel-name-suffix "" (persp-name (get-current-persp))))
      )
@@ -73,12 +74,13 @@
                                (carousel-focus . 0)
                                (carousel-max . -1)
                                (carousel-backgrounds . ("gray19" "gray12" "gray4"))
-                               (carousel-scratch . ,(get-buffer-create (format "*%s*" (safe-persp-name persp))))
+                               (carousel-start . ,(get-buffer-create (format "*%s Start*" (safe-persp-name persp))))
+                               (carousel-end   . ,(get-buffer-create (format "*%s End*"   (safe-persp-name persp))))
                                )
                              persp
                              )
-    (ring-insert+extend (persp-parameter 'carousel-actual persp)
-                        (persp-parameter 'carousel-scratch persp))
+    (run-hooks 'carousel-create-hook)
+    (ring-insert+extend (persp-parameter 'carousel-actual persp) (persp-parameter 'carousel-start  persp) t)
     )
   )
 

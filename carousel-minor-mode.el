@@ -86,7 +86,8 @@
 
 (defun carousel-protect-scratch-p ()
   (not (with-carousel
-           (eq (current-buffer) wr-scratch)
+           (or (eq (current-buffer) wr-start)
+               (eq (current-buffer) wr-end))
          )
        )
   )
