@@ -155,6 +155,11 @@
   (with-carousel
       (unless (window-live-p window) (select-window window))
     (set-window-buffer window (if index (carousel--get wr-actual index) wr-scratch))
+    (when (and index (fboundp #'solaire-mode))
+      (with-current-buffer (window-buffer window)
+        (solaire-mode (if (zerop (mod index 2)) 1 -1))
+        )
+      )
     (if (window-parameter window 'carousel-claimed)
         (message "Unclaimed Window: %s" window)
       t

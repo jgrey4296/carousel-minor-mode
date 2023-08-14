@@ -43,6 +43,7 @@
      (carousel-add-to-head (current-buffer))
      (carousel-reset-columns t)
      (message "Converted")
+     (carousel-print-order)
      )
     )
   )
@@ -84,9 +85,7 @@
 (defun carousel-activate-persp-fn (type)
   (when (persp-parameter 'carousel)
     (cond ('frame)
-          ('window
-
-           )
+          ('window)
           )
     )
   )

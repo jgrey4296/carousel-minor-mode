@@ -55,6 +55,7 @@
   :lighter "Carousel"
   :global t
   :group 'carousel
+  :keymap (make-sparse-keymap)
   (add-to-list 'persp-created-functions           #'carousel-create-persp-fn)
   (add-to-list 'persp-activated-functions         #'carousel-activate-persp-fn)
   (add-to-list 'persp-before-deactivate-functions #'carousel-deactivate-persp-fn)
@@ -62,6 +63,7 @@
   (add-hook 'find-file-hook                       #'carousel-add-current-buffer)
   (add-hook 'kill-buffer-hook                     #'carousel-remove-buffer)
   (add-hook 'kill-buffer-query-functions          #'carousel-protect-scratch-p -50)
+  (message "Carousel Initalized")
   )
 
 ;;-- end mode

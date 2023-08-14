@@ -50,6 +50,7 @@
   )
 
 (defmacro with-carousel-adding (&rest body)
+  (declar (indent 1))
   `(let ((carousel--adding t))
      ,@body
      )
