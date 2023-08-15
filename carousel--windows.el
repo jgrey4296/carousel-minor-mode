@@ -88,12 +88,9 @@
   (interactive)
   (when-carousel
       (pcase carousel-focus-style
-        ('balanced
-         (carousel--redisplay-balanced))
-        ('newest
-        (carousel--redisplay-newest))
-        ('oldest
-         (carousel--redisplay-oldest))
+        ('balanced (carousel--redisplay-balanced))
+        ('newest (carousel--redisplay-newest))
+        ('oldest (carousel--redisplay-oldest))
         (_ (message "Unknown redisplay style"))
         )
     )
@@ -125,18 +122,28 @@
 
 (defun carousel--redisplay-newest ()
   (with-carousel
-      (let ((windows (reverse (window-at-side-list nil carousel-selector)))
-            (ring-len (ring-length wr-actual))
-            (focus wr-focus)
-            )
-        (when (and wr-loop (zerop focus))
-          (set-window-buffer (pop windows) (persp-parameter 'carousel-end)))
+      (let* ((windows (reverse (window-at-side-list nil carousel-selector)))
+             (multi-windows (< 1 (length windows)))
+             (ring-len (ring-length wr-actual))
+             (focus wr-focus)
+             )
+        (message "Starting Focus: %s" focus)
+        (cond ((and multi-windows (zerop focus))
+               (set-window-buffer (pop windows) (persp-parameter 'carousel-end)))
+              ((and multi-windows (< 0 focus))
+               (setq focus (carousel--newer ring-len focus wr-loop)))
+              )
+
         (while windows
-          (if (carousel-set-window (pop windows) focus)
-              (setq focus (carousel--older ring-len focus wr-loop)))
+          (message "Loop Position: %s" focus)
+          (if (null focus)
+              (set-window-buffer (pop windows) (persp-parameter 'carousel-start))
+            (carousel-set-window (pop windows) focus)
+            )
+          (setq focus (carousel--older ring-len focus wr-loop))
           )
         )
-    )
+      )
   )
 
 (defun carousel--redisplay-oldest ()
@@ -156,19 +163,20 @@
   )
 
 (defun carousel-set-window (window index)
+  (message "Setting Window: %s %s" index window)
   (with-carousel
-      (unless (window-live-p window) (select-window window))
-    (set-window-buffer window (if index (carousel--get wr-actual index) wr-start))
-    (when (and index (fboundp #'solaire-mode))
-      (with-current-buffer (window-buffer window)
-        (solaire-mode (if (zerop (mod index 2)) 1 -1))
-        )
-      )
-    (if (window-parameter window 'carousel-claimed)
-        (message "Unclaimed Window: %s" window)
-      t
-      )
-    )
+   (unless (window-live-p window) (select-window window))
+   (set-window-buffer window (if index (carousel--get wr-actual index) wr-start))
+   (when (and index (fboundp #'solaire-mode))
+     (with-current-buffer (window-buffer window)
+       (solaire-mode (if (zerop (mod index 2)) 1 -1))
+       )
+     )
+   ;; (if (window-parameter window 'carousel-claimed)
+   ;;     (message "Unclaimed Window: %s" window)
+   ;;   t
+   ;;   )
+   )
   )
 
 (provide 'carousel--windows)

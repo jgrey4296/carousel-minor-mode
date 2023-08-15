@@ -75,18 +75,18 @@
   )
 
 (defun carousel-add-current-buffer (&optional arg)
-  (interactive "p")
+  (interactive "P")
   (when (and (persp-parameter 'carousel)
              (or (buffer-local-boundp 'carousel-buffer (current-buffer))
                  (funcall carousel-buffer-test-fn (current-buffer)))
              (not carousel-suppress-adding)
              )
-    (carousel-add-to-head (current-buffer) arg)
+    (carousel-add-to-head (current-buffer) t)
     )
   )
 
 (defun carousel-add-to-head (buffer &optional arg)
-  (interactive "b\np")
+  (interactive "b\nP")
   (with-carousel
       (-when-let (buff (get-buffer buffer))
         (message "Adding buffer to window ring: %s" buff)

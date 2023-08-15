@@ -13,7 +13,9 @@
 return the next newer index "
   (pcase index
     ((pred null) nil)
-    ((or (guard loop) (guard (< 0 index)))
+    ((guard loop)
+     (ring-minus1 index len))
+    ((guard (< 0 index))
      (ring-minus1 index len))
     (_ nil)
     )
@@ -24,7 +26,9 @@ return the next newer index "
 return the next older index"
   (pcase index
     ((pred null) nil)
-    ((or (guard loop) (guard (< index (1- len))))
+    ((guard loop)
+     (ring-plus1 index len))
+    ((guard (< index (1- len)))
      (ring-plus1 index len))
     (_ nil)
     )
@@ -121,6 +125,18 @@ return the next older index"
     (2 (cadr lst))
     (3 (cadr lst))
     (_ (nth (/ (length lst) 2) lst))
+    )
+  )
+
+(defun carousel-debug ()
+  (interactive)
+  (let ((wr-actual (persp-parameter 'carousel-actual))
+        (wr-loop (persp-parameter 'carousel-loop))
+        (wr-focus (persp-parameter 'carousel-focus))
+        )
+    (message "Carousel Debug: (loop %s) (focus %s) (len %s) (ring %s)"
+             wr-loop wr-focus (ring-length wr-actual)
+             (reverse (ring-elements wr-actual)))
     )
   )
 
