@@ -32,12 +32,11 @@
         )
     (ring-resize wr-actual (ring-length wr-actual))
     )
-  (when arg (carousel-redisplay))
   )
 
 (defun carousel-remove-buffer (&optional buffer arg)
   " Remove the current buffer from the ring "
-  (interactive "b\np")
+  (interactive "b\nP")
   (with-carousel
       (let* ((buff (if (bufferp buffer) buffer (current-buffer)))
              (index (unless (ring-empty-p wr-actual)
@@ -49,7 +48,6 @@
           )
         )
     )
-  (when arg (carousel-redisplay))
   )
 
 (defun carousel-replace-buffer(&optional buffer arg)
@@ -71,7 +69,6 @@
           )
         )
     )
-  (when arg (carousel-redisplay))
   )
 
 (defun carousel-add-current-buffer (&optional arg)
@@ -93,7 +90,6 @@
         (ring-insert+extend wr-actual buff t)
         )
     )
-  (when arg (carousel-redisplay))
   )
 
 (defun carousel-add-to-tail (buffer &optional arg)
@@ -102,7 +98,6 @@
       (-when-let (buff (get-buffer buffer))
         (ring-insert-at-beginning wr-actual buff))
     )
-  (when arg (carousel-redisplay))
   )
 
 (defun carousel-shrink-sides (amt)

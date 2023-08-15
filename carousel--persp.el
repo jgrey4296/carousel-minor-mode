@@ -40,6 +40,7 @@
      (add-hook 'find-file-hook              #'carousel-add-current-buffer)
      (add-hook 'kill-buffer-hook            #'carousel-remove-buffer)
      (add-hook 'kill-buffer-query-functions #'carousel-protect-scratch-p -50)
+     (add-hook 'post-command-hook           #'carousel-redisplay -99)
      (persp-rename (format "%s%s" (persp-name (get-current-persp)) carousel-name-suffix))
      (carousel-add-to-head (current-buffer))
      (carousel-reset-columns t)

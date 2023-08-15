@@ -42,7 +42,8 @@
   )
 
 (defmacro when-carousel (&rest body)
-  `(when (persp-parameter 'carousel)
+  `(when (and (persp-parameter 'carousel)
+              (not (ring-empty-p (persp-parameter 'carousel-actual))))
      ,@body
      )
   )

@@ -30,8 +30,6 @@
               )
             )
           )
-         (carousel-redisplay)
-         ;; (carousel-print-order)
          )
         ((< 1 arg)
          (evil-window-left 1))
@@ -49,7 +47,6 @@
   (interactive "p")
   (with-carousel
       (modify-persp-parameters '((carousel-focus . 0)))
-    (when arg (carousel-redisplay))
     )
   )
 
@@ -57,7 +54,6 @@
   (interactive "p")
   (with-carousel
       (modify-persp-parameters `((carousel-focus . ,(1- (ring-length wr-actual)))))
-    (when arg (carousel-redisplay))
     )
   )
 
@@ -80,7 +76,6 @@
       (modify-persp-parameters `((carousel-actual . ,new-ring)))
       (modify-persp-parameters `((carousel-focus . ,(ring-member new-ring curr))))
       )
-    (when arg (carousel-redisplay))
     (select-window (get-buffer-window (current-buffer)))
     )
   (carousel-print-order)
@@ -105,7 +100,6 @@
       (modify-persp-parameters `((carousel-actual . ,new-ring)))
       (modify-persp-parameters `((carousel-focus . ,(ring-member new-ring curr))))
       )
-    (when arg (carousel-redisplay))
     (select-window (get-buffer-window (current-buffer)))
     )
   (carousel-print-order)
