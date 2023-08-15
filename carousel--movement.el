@@ -21,7 +21,7 @@
   (interactive "p")
   (cond ((persp-parameter 'carousel)
          (with-carousel
-          (let* ((mv-fn (if (< arg 2) #'carousel--newer #'carousel--older))
+          (let* ((mv-fn (if (or (null arg) (< arg 2)) #'carousel--newer #'carousel--older))
                  (new-focus (funcall mv-fn (ring-length wr-actual) wr-focus wr-loop))
                  )
             (message "Current Focus: %s -> %s : %s %s" wr-focus new-focus mv-fn arg)

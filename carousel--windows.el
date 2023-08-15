@@ -127,7 +127,6 @@
              (ring-len (ring-length wr-actual))
              (focus wr-focus)
              )
-        (message "Starting Focus: %s" focus)
         (cond ((and multi-windows (zerop focus))
                (set-window-buffer (pop windows) (persp-parameter 'carousel-end)))
               ((and multi-windows (< 0 focus))
@@ -135,7 +134,6 @@
               )
 
         (while windows
-          (message "Loop Position: %s" focus)
           (if (null focus)
               (set-window-buffer (pop windows) (persp-parameter 'carousel-start))
             (carousel-set-window (pop windows) focus)
@@ -163,7 +161,6 @@
   )
 
 (defun carousel-set-window (window index)
-  (message "Setting Window: %s %s" index window)
   (with-carousel
    (unless (window-live-p window) (select-window window))
    (set-window-buffer window (if index (carousel--get wr-actual index) wr-start))
