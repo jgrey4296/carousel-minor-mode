@@ -40,8 +40,8 @@
      (add-hook 'find-file-hook              #'carousel-add-current-buffer)
      (add-hook 'kill-buffer-hook            #'carousel-remove-buffer)
      (add-hook 'kill-buffer-query-functions #'carousel-protect-scratch-p -50)
-     (add-hook 'post-command-hook           #'carousel-redisplay -99)
      (persp-rename (format "%s%s" (persp-name (get-current-persp)) carousel-name-suffix))
+     (carousel-advice-for-redisplay)
      (carousel-add-to-head (current-buffer))
      (carousel-reset-columns t)
      (message "Converted")
@@ -55,12 +55,13 @@
   (when (persp-parameter 'carousel (get-current-persp))
      (remove-hook 'find-file-hook              #'carousel-add-current-buffer)
      (remove-hook 'kill-buffer-hook            #'carousel-remove-buffer)
-     (remove-hook 'kill-buffer-query-functions #'carousel-protect-scratch-p -50)
+     (remove-hook 'kill-buffer-query-functions #'carousel-protect-scratch-p)
      (mapc #'delete-persp-parameter
              '(carousel carousel-actual carousel-grow carousel-loop carousel-duplicates
                carousel-focus carousel-max carousel-backgrounds carousel-start carousel-end))
      (persp-delete-other-windows)
      (persp-rename (string-replace carousel-name-suffix "" (persp-name (get-current-persp))))
+     (carousel-remove-redisplay-advice)
      )
   )
 
@@ -110,5 +111,18 @@
           )
     )
   )
+
+(defun carousel-advice-for-redisplay ()
+  (dolist (fn carousel-redisplay-activators)
+    (advice-add fn :after #'carousel-redisplay)
+    )
+  )
+
+(defun carousel-remove-redisplay-advice ()
+  (dolist (fn carousel-redisplay-activators)
+    (advice-remove fn #'carousel-redisplay)
+    )
+  )
+
 
 (provide 'carousel--persp)

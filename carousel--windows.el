@@ -84,9 +84,9 @@
     )
   )
 
-(defun carousel-redisplay ()
+(defun carousel-redisplay (&rest args)
   (interactive)
-  (when-carousel
+  (when (not (carousel-empty-p))
       (pcase carousel-focus-style
         ('balanced (carousel--redisplay-balanced))
         ('newest (carousel--redisplay-newest))
@@ -180,3 +180,4 @@
   )
 
 (provide 'carousel--windows)
+

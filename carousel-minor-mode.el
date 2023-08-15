@@ -45,6 +45,16 @@
 
 (defvar carousel-selector 'top "using window-at-side-list")
 
+(defconst carousel-redisplay-activators '(carousel-add-to-head
+                                          carousel-add-to-tail
+                                             carousel-remove-buffer
+                                          carousel-replace-buffer
+                                          carousel-move-focus
+                                          carousel-move-focus-alt
+                                          carousel-move-buffer-left
+                                          carousel-move-buffer-right
+                                          ))
+
 ;;-- end vars
 
 ;;-- mode
@@ -74,6 +84,13 @@
   (interactive "p")
   (when (persp-parameter 'carousel)
     t)
+  )
+
+(defun carousel-empty-p (&optional arg)
+  (interactive "p")
+  (when (or (not (carousel-p)) (ring-empty-p (persp-parameter 'carousel-actual)))
+    t
+    )
   )
 
 (defun carousel-buffer-p (&optional arg buffer)
