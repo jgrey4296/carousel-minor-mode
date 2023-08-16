@@ -18,7 +18,7 @@
 (defun carousel-move-focus (&optional arg)
   " move the focus towards the most recent addition to window ring.
  if arg is not nil, move towards oldest "
-  (interactive "p")
+  (interactive "P")
   (cond ((persp-parameter 'carousel)
          (with-carousel
           (let* ((mv-fn (if (or (null arg) (< arg 2)) #'carousel--newer #'carousel--older))
@@ -31,10 +31,10 @@
             )
           )
          )
-        ((< 1 arg)
-         (evil-window-left 1))
-        (t
+        ((or (null arg) (< arg 2))
          (evil-window-right 1))
+        (t
+         (evil-window-left 1))
         )
   )
 

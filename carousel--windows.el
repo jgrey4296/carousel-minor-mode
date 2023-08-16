@@ -162,19 +162,22 @@
 
 (defun carousel-set-window (window index)
   (with-carousel
-   (unless (window-live-p window) (select-window window))
-   (set-window-buffer window (if index (carousel--get wr-actual index) wr-start))
-   (when (and index (fboundp #'solaire-mode))
-     (with-current-buffer (window-buffer window)
-       (solaire-mode (if (zerop (mod index 2)) 1 -1))
+   (let ((buff (when index (carousel--get wr-actual index)))
+         )
+     (unless (and buff (buffer-live-p buff))
+       (ring-remove wr-actual index)
+       (ring-resize wr-actual (ring-length wr-actual))
+       (setq buff nil)
+       )
+     (set-window-buffer window (if buff buff wr-start))
+
+     (when (and index (fboundp #'solaire-mode))
+       (with-current-buffer (window-buffer window)
+         (solaire-mode (if (zerop (mod index 2)) 1 -1))
+         )
        )
      )
-   ;; (if (window-parameter window 'carousel-claimed)
-   ;;     (message "Unclaimed Window: %s" window)
-   ;;   t
-   ;;   )
    )
   )
 
 (provide 'carousel--windows)
-
