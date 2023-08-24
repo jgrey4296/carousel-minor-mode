@@ -47,13 +47,18 @@
 
 (defconst carousel-redisplay-activators '(carousel-add-to-head
                                           carousel-add-to-tail
-                                             carousel-remove-buffer
+                                          carousel-remove-buffer
                                           carousel-replace-buffer
                                           carousel-move-focus
                                           carousel-move-focus-alt
                                           carousel-move-buffer-left
                                           carousel-move-buffer-right
+                                          carousel-goto-newest
+                                          carousel-goto-oldest
                                           ))
+
+(defvar carousel-create-hook nil)
+(defvar carousel-pause-auto-redisplay nil)
 
 ;;-- end vars
 

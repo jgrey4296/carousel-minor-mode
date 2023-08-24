@@ -8,8 +8,6 @@
   (require 'dash)
   )
 
-(defvar carousel-create-hook nil)
-
 (defun carousel-new ()
   " create a new perspective and ring "
   (interactive)
@@ -46,6 +44,28 @@
      (carousel-reset-columns t)
      (message "Converted")
      (carousel-print-order)
+     )
+    )
+  )
+
+(defun carousel-toggle ()
+  (interactive)
+  (pcase (persp-parameter 'carousel)
+    ('nil (carousel-convert))
+    (paused
+     (set-persp-parameter 'carousel t)
+     (add-hook 'find-file-hook              #'carousel-add-current-buffer)
+     (add-hook 'kill-buffer-hook            #'carousel-remove-buffer)
+     (add-hook 'kill-buffer-query-functions #'carousel-protect-scratch-p -50)
+     (carousel-advice-for-redisplay)
+     (carousel-print-order)
+     )
+    (t
+     (set-persp-parameter 'carousel 'paused)
+     (remove-hook 'find-file-hook              #'carousel-add-current-buffer)
+     (remove-hook 'kill-buffer-hook            #'carousel-remove-buffer)
+     (remove-hook 'kill-buffer-query-functions #'carousel-protect-scratch-p)
+     (carousel-remove-redisplay-advice)
      )
     )
   )
@@ -123,6 +143,5 @@
     (advice-remove fn #'carousel-redisplay)
     )
   )
-
 
 (provide 'carousel--persp)

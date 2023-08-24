@@ -86,7 +86,7 @@
 
 (defun carousel-redisplay (&rest args)
   (interactive)
-  (when (not (carousel-empty-p))
+  (when (not (or (carousel-empty-p) carousel-pause-auto-redisplay))
       (pcase carousel-focus-style
         ('balanced (carousel--redisplay-balanced))
         ('newest (carousel--redisplay-newest))

@@ -100,8 +100,8 @@
     )
   )
 
-(defun carousel-shrink-sides (amt)
-  (interactive "NShrink By: ")
+(defun carousel-expand-focus (amt)
+  (interactive "NExpand By: ")
   (with-carousel
       (let ((curr (selected-window)))
         (walk-windows #'(lambda (wind)
