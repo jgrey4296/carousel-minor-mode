@@ -52,7 +52,7 @@
   (interactive)
   (pcase (persp-parameter 'carousel)
     ('nil (carousel-convert))
-    (paused
+    ('paused
      (set-persp-parameter 'carousel t)
      (add-hook 'find-file-hook              #'carousel-add-current-buffer)
      (add-hook 'kill-buffer-hook            #'carousel-remove-buffer)
