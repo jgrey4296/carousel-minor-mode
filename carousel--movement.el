@@ -105,4 +105,17 @@
   (carousel-print-order)
   )
 
+(defun carousel-goto-choice (&optional buffer)
+  (interactive "b")
+  (with-carousel
+   (let ((new-focus (ring-member wr-actual (get-buffer buffer))))
+     (message "Carousel New focus: %s %s" buffer new-focus)
+     (when new-focus
+       (modify-persp-parameters `((carousel-focus . ,new-focus)))
+       (carousel-redisplay)
+       )
+     )
+   )
+  )
+
 (provide 'carousel--movement)
