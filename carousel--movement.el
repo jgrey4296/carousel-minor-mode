@@ -24,13 +24,13 @@
           (let* ((mv-fn (if (or (null arg) (< arg 2)) #'carousel--newer #'carousel--older))
                  (new-focus (funcall mv-fn (ring-length wr-actual) wr-focus wr-loop))
                  )
-            (message "Current Focus: %s -> %s : %s %s" wr-focus new-focus mv-fn arg)
+            ;; (message "Current Focus: %s -> %s : %s %s" wr-focus new-focus mv-fn arg)
             (when new-focus
               (modify-persp-parameters `((carousel-focus . ,new-focus)))
               )
             )
           )
-         )
+        )
         ((or (null arg) (< arg 2))
          (evil-window-right 1))
         (t

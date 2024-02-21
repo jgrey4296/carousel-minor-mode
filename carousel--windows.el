@@ -94,6 +94,7 @@
         (_ (message "Unknown redisplay style"))
         )
     )
+  (carousel-print-order)
   )
 
 (defun carousel--redisplay-balanced ()
