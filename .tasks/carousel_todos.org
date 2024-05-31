@@ -1,0 +1,13 @@
+#+title: Carousel Todos
+
+* carousel-minor-mode
+:PROPERTIES:
+:ID:       2cf07f8f-96eb-4e86-bf2c-68723cba0bb3
+:END:
+** add tests
+
+** add buffer pairing for tests
+'t' to shift
+
+** add vertical tracks
+'R - [j,k]' to shift
