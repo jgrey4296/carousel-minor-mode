@@ -21,6 +21,9 @@
            (wr-start      (persp-parameter 'carousel-start))
            (wr-end        (persp-parameter 'carousel-end))
            )
+       (unless (buffer-live-p wr-start) (get-buffer-create wr-start))
+       (unless (buffer-live-p wr-end) (get-buffer-create wr-end))
+
        ,@body
        )
      )
