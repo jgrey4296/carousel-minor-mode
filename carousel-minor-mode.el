@@ -40,6 +40,7 @@
 (defvar carousel-column-fn #'carousel-setup-columns-default "sets up the window config, returning windows to claim")
 
 (defvar carousel-name-suffix "-Carousel")
+(defvar carousel-terminals '("-Carousel Start" "-Carousel End") "The names used to create the terminal buffers of the carousel")
 
 (defvar carousel-focus-style 'newest "newest, oldest, balanced")
 

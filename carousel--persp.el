@@ -96,8 +96,8 @@
                                (carousel-focus . 0)
                                (carousel-max . -1)
                                (carousel-backgrounds . ("gray19" "gray12" "gray4"))
-                               (carousel-start . ,(get-buffer-create (format "*%s Start*" (safe-persp-name persp))))
-                               (carousel-end   . ,(get-buffer-create (format "*%s End*"   (safe-persp-name persp))))
+                               (carousel-start . ,(get-buffer-create (format "*%s%s*" (safe-persp-name persp) (car carousel-terminals))))
+                               (carousel-end   . ,(get-buffer-create (format "*%s%s*" (safe-persp-name persp) (cadr carousel-terminals))))
                                )
                              persp
                              )
