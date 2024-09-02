@@ -60,7 +60,7 @@
      (carousel-advice-for-redisplay)
      (carousel-print-order)
      )
-    (t
+    (_
      (set-persp-parameter 'carousel 'paused)
      (remove-hook 'find-file-hook              #'carousel-add-current-buffer)
      (remove-hook 'kill-buffer-hook            #'carousel-remove-buffer)
@@ -96,8 +96,8 @@
                                (carousel-focus . 0)
                                (carousel-max . -1)
                                (carousel-backgrounds . ("gray19" "gray12" "gray4"))
-                               (carousel-start . (format "*%s%s*" (safe-persp-name persp) (car carousel-terminals)))
-                               (carousel-end   . (format "*%s%s*" (safe-persp-name persp) (cadr carousel-terminals)))
+                               (carousel-start . ,(format "*%s%s*" (safe-persp-name persp) (car carousel-terminals)))
+                               (carousel-end   . ,(format "*%s%s*" (safe-persp-name persp) (cadr carousel-terminals)))
                                )
                              persp
                              )
