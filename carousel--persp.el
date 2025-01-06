@@ -8,23 +8,20 @@
   (require 'dash)
   )
 
-(defun carousel-new ()
+(defun carousel-new (arg)
   " create a new perspective and ring "
-  (interactive)
+  (interactive "p")
   (message "Creating new window ring")
   (let ((ring-name (format "%s%s" (read-string "New Ring: ") carousel-name-suffix))
         (curr (current-buffer))
+        (buffers (mapcar #'window-buffer (window-list)))
         )
-    (with-carousel-adding
-     (persp-add-new ring-name)
-     (persp-switch ring-name)
-     (add-hook 'find-file-hook              #'carousel-add-current-buffer)
-     (add-hook 'kill-buffer-hook            #'carousel-remove-buffer)
-     (add-hook 'kill-buffer-query-functions #'carousel-protect-scratch-p -50)
-     (switch-to-buffer (persp-parameter 'carousel-start))
-     (carousel-add-to-head curr)
-     (carousel-reset-columns t)
-     )
+    (persp-add-new ring-name)
+    (persp-switch ring-name)
+    (carousel-convert)
+    (when (< 1 arg)
+      (with-carousel (dolist (buff buffers) (carousel-add-to-head buff 2)))
+      )
     )
   )
 
@@ -49,6 +46,7 @@
   )
 
 (defun carousel-toggle ()
+  "Toggle the carousel active and not, without destroying the carousel"
   (interactive)
   (pcase (persp-parameter 'carousel)
     ('nil (carousel-convert))

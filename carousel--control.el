@@ -83,20 +83,25 @@
   )
 
 (defun carousel-add-to-head (buffer &optional arg)
-  (interactive "b\nP")
+  (interactive "b\np")
   (with-carousel
-      (-when-let (buff (get-buffer buffer))
-        (message "Adding buffer to window ring: %s" buff)
-        (ring-insert+extend wr-actual buff t)
-        )
-    )
+   (-when-let (buff (get-buffer buffer))
+     (message "Adding buffer to window ring: %s" buff)
+     (pcase arg
+       ((or 'nil 1)
+        (carousel--put wr-actual buff t))
+       ((and _ (guard (not (carousel--contains wr-actual buff))))
+        (carousel--put wr-actual buff t))
+       )
+     )
+   )
   )
 
 (defun carousel-add-to-tail (buffer &optional arg)
   (interactive "b\np")
   (with-carousel
       (-when-let (buff (get-buffer buffer))
-        (ring-insert-at-beginning wr-actual buff))
+        (carousel--put-tail wr-actual buff))
     )
   )
 
