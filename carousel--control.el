@@ -85,7 +85,9 @@
 (defun carousel-add-to-head (buffer &optional arg)
   (interactive "b\np")
   (with-carousel
-   (-when-let (buff (get-buffer buffer))
+   (when-let* ((buff (get-buffer buffer))
+               (valid (not (-contains? carousel-buffer-exclusions (buffer-name buff))))
+              )
      (message "Adding buffer to window ring: %s" buff)
      (pcase arg
        ((or 'nil 1)
@@ -115,5 +117,37 @@
                               (shrink-window-horizontally amt))))
                       )))
   )
+
+(defun carousel-pin-left ()
+  "toggle the current buffer as an override on the leftmost window"
+  (interactive)
+  (with-carousel
+   (pcase (persp-parameter 'carousel-pin)
+     ((and `(,x . ,y) (guard (equal x (current-buffer))))
+      (message "%s unpinned from left side" (buffer-name))
+      (set-persp-parameter 'carousel-pin (cons nil y)))
+     (`(,_ . ,y)
+      (message "%s pinned to left side" (buffer-name))
+      (set-persp-parameter 'carousel-pin (cons (current-buffer) y)))
+     )
+   )
+  )
+
+(defun carousel-pin-right ()
+  "add the current buffer as an overide for the rightmost window"
+  (interactive)
+  (with-carousel
+   (pcase (persp-parameter 'carousel-pin)
+     ((and `(,x . ,y) (guard (equal y (current-buffer))))
+      (message "%s unpinned from right side" (buffer-name))
+      (set-persp-parameter 'carousel-pin (cons x nil)))
+     (`(,x . ,_)
+      (message "%s pinned to right side" (buffer-name))
+      (set-persp-parameter 'carousel-pin (cons x (current-buffer))))
+     )
+   )
+  )
+
+
 
 (provide 'carousel--control)

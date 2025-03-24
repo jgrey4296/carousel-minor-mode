@@ -15,11 +15,14 @@
 
 ;; Add-to-list most-recent/oldest
 
-(require 'ring)
-(require 'persp-mode)
-(require 'cl-lib)
-(require 'evil)
-(require 'dash)
+(eval-when-compile
+  (require 'ring)
+  (require 'persp-mode)
+  (require 'cl-lib)
+  (require 'evil)
+  (require 'dash)
+  (require 'macro-tools)
+  )
 
 (require 'carousel--macros)
 (require 'carousel--util)
@@ -40,11 +43,14 @@
 (defvar carousel-column-fn #'carousel-setup-columns-default "sets up the window config, returning windows to claim")
 
 (defvar carousel-name-suffix "-Carousel")
+
 (defvar carousel-terminals '("-Carousel Start" "-Carousel End") "The names used to create the terminal buffers of the carousel")
 
 (defvar carousel-focus-style 'newest "newest, oldest, balanced")
 
 (defvar carousel-selector 'top "using window-at-side-list")
+
+(defvar carousel-buffer-exclusions nil)
 
 (defconst carousel-redisplay-activators '(carousel-add-to-head
                                           carousel-add-to-tail
@@ -59,6 +65,7 @@
                                           ))
 
 (defvar carousel-create-hook nil)
+
 (defvar carousel-pause-auto-redisplay nil)
 
 ;;-- end vars
@@ -120,6 +127,5 @@
   )
 
 ;;-- end test predicates
-
 
 (provide 'carousel-minor-mode)
