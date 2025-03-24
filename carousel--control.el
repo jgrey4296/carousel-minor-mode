@@ -129,6 +129,9 @@
      (`(,_ . ,y)
       (message "%s pinned to left side" (buffer-name))
       (set-persp-parameter 'carousel-pin (cons (current-buffer) y)))
+     (_
+      (message "%s pinned to left side" (buffer-name))
+      (set-persp-parameter 'carousel-pin (cons (current-buffer) nil)))
      )
    )
   )
@@ -144,6 +147,9 @@
      (`(,x . ,_)
       (message "%s pinned to right side" (buffer-name))
       (set-persp-parameter 'carousel-pin (cons x (current-buffer))))
+     (_
+      (message "%s pinned to right side" (buffer-name))
+      (set-persp-parameter 'carousel-pin (cons nil  (current-buffer))))
      )
    )
   )
