@@ -77,6 +77,7 @@
              (or (buffer-local-boundp 'carousel-buffer (current-buffer))
                  (funcall carousel-buffer-test-fn (current-buffer)))
              (not carousel-suppress-adding)
+             (not (-contains? carousel-buffer--mode-exclusions major-mode))
              )
     (carousel-add-to-head (current-buffer) t)
     )

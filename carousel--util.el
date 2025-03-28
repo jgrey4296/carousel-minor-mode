@@ -35,7 +35,6 @@ return the next older index"
   )
 
 (defun carousel--print-fn (buff focus selected)
-  (message "Got: %s %s %s" buff (eq buff focus) selected)
   (cond
     ((string-equal buff focus)
      (propertize (format "<- [%s] ->" buff) 'face '(:background "blue")))

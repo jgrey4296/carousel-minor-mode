@@ -10,17 +10,18 @@
 
 (defun carousel-reset-columns (&optional arg)
   (interactive "p")
-  (carousel-setup-columns arg t)
+  (carousel-setup-columns arg nil)
   )
 
-(defun carousel-setup-columns (&optional arg soft)
+(defun carousel-setup-columns (&optional arg hard)
   " Reset windows using `carousel-column-fn`
-    if SOFT then don't clear the window ring "
+    if HARD then clear the carousel"
   (interactive "pi")
   (persp-delete-other-windows)
-  (mapc (-rpartial #'carousel-claim-window t) (funcall carousel-column-fn arg soft))
+  (mapc (-rpartial #'carousel-claim-window t) (funcall carousel-column-fn arg (not hard)))
+  (balance-windows)
 
-  (unless soft
+  (when hard
     ;; clear ring
     (modify-persp-parameters `((carousel-actual . ,(make-ring 1))))
     (carousel-add-current-buffer)
@@ -85,6 +86,7 @@
   )
 
 (defun carousel-redisplay (&rest args)
+  " Redisplay the carousel in the current frame "
   (interactive)
   (when (not (or (carousel-empty-p) carousel-pause-auto-redisplay))
       (pcase carousel-focus-style
@@ -108,6 +110,7 @@
   )
 
 (defun carousel--redisplay-balanced ()
+  "Redisplay the carousel using the largest window as the focus"
   (with-carousel
       (let* ((largest  (carousel--rough-mid (window-at-side-list nil carousel-selector)))
              (ring-len (ring-length wr-actual))
@@ -116,11 +119,14 @@
              )
         (message "Windows: Largest: %s (%s) curr: %s (%s)" largest (window-live-p largest) curr-win (window-live-p curr-win))
         (message "carousel-state: (%s) %s" ring-len wr-actual)
+        ;; Set the largest window to the focus
         (set-window-buffer largest (carousel--get wr-actual wr-focus))
+        ;; Set the windows to the right
         (while curr-win
           (setq index (if (carousel-set-window curr-win index) (carousel--newer ring-len index wr-loop) index)
                 curr-win (window-next-sibling curr-win))
         )
+        ;; Reset to the center and set the lefts
         (setq index (carousel--older ring-len wr-focus wr-loop)
               curr-win (window-prev-sibling largest))
         (while curr-win
@@ -132,18 +138,22 @@
   )
 
 (defun carousel--redisplay-newest ()
+  "Redisplay the carousel from the newest edge of the carousel"
   (with-carousel
       (let* ((windows (reverse (window-at-side-list nil carousel-selector)))
              (multi-windows (< 1 (length windows)))
              (ring-len (ring-length wr-actual))
              (focus wr-focus)
              )
+        ;; If there are 0<n windows, and the focus is at the end,
+        ;; set the end window to be the temp end buffer
         (cond ((and multi-windows (zerop focus))
                (set-window-buffer (pop windows) (persp-parameter 'carousel-end)))
               ((and multi-windows (< 0 focus))
                (setq focus (carousel--newer ring-len focus wr-loop)))
               )
 
+        ;; Work back from the focus
         (while windows
           (if (null focus)
               (set-window-buffer (pop windows) (persp-parameter 'carousel-start))
@@ -156,6 +166,7 @@
   )
 
 (defun carousel--redisplay-oldest ()
+  "Redisplay the carousel from the oldest edge forward"
   (with-carousel
       (let ((windows (window-at-side-list nil carousel-selector))
             (ring-len (ring-length wr-actual))
@@ -172,16 +183,24 @@
   )
 
 (defun carousel-set-window (window index)
+  "Set a given window to show the buffer i of the carousel
+also activates solaire more as necessary to alternate on the carousel
+"
   (with-carousel
    (let ((buff (when index (carousel--get wr-actual index)))
+         (curr-mode (with-current-buffer (window-buffer window)
+                      major-mode))
          )
      (unless (and buff (buffer-live-p buff))
+       ;; If the buffer is dead, remove it from the ring and use the temp buffer
        (ring-remove wr-actual index)
        (ring-resize wr-actual (ring-length wr-actual))
-       (setq buff nil)
+       (setq buff wr-start)
        )
-     (set-window-buffer window (if buff buff wr-start))
-
+     ;; skip setting the buffer if the window's current buffer mode is excluded
+     (unless (-contains? carousel-buffer--mode-exclusions curr-mode)
+       (set-window-buffer window buff)
+       )
      (when (and index (fboundp #'solaire-mode))
        (with-current-buffer (window-buffer window)
          (solaire-mode (if (zerop (mod index 2)) 1 -1))

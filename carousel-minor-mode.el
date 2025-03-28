@@ -52,6 +52,8 @@
 
 (defvar carousel-buffer-exclusions nil)
 
+(defvar carousel-buffer--mode-exclusions (list 'dired-mode))
+
 (defconst carousel-redisplay-activators '(carousel-add-to-head
                                           carousel-add-to-tail
                                           carousel-remove-buffer
